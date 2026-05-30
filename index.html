@@ -1,9 +1,11 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neon Heart</title><style>
+<title>Neon Heart</title>
 
+<style>
 body{
 margin:0;
 overflow:hidden;
@@ -14,18 +16,21 @@ font-family:Arial,sans-serif;
 canvas{
 display:block;
 }
+</style>
 
-</style></head>
-<body><audio id="bgMusic" loop>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
 <source src="song.mp3" type="audio/mpeg">
-</audio><canvas id="heartCanvas"></canvas>
+</audio>
+
+<canvas id="heartCanvas"></canvas>
 
 <script>
 
 const music =
 document.getElementById("bgMusic");
-
-/* تشغيل الصوت عند أول لمس أو تحريك أو سحب */
 
 let musicStarted = false;
 
@@ -98,9 +103,9 @@ canvas.width / 2;
 const centerY =
 canvas.height / 2;
 
-const scale = 20;
+/* القلب الخارجي */
 
-/* القلب */
+const scale = 20;
 
 for(let i=0;i<100;i++){
 
@@ -159,6 +164,67 @@ py
 
 }
 
+/* القلب الداخلي */
+
+const innerScale = 17;
+
+for(let i=0;i<100;i++){
+
+const t =
+i * (Math.PI * 2 / 100)
++ angle;
+
+const x =
+16 * Math.pow(
+Math.sin(t),
+3
+);
+
+const y =
+13 * Math.cos(t)
+- 5 * Math.cos(2*t)
+- 2 * Math.cos(3*t)
+- Math.cos(4*t);
+
+const px =
+centerX + x * innerScale;
+
+const py =
+centerY - y * innerScale;
+
+const fade =
+(
+Math.sin(
+i * 0.15 + wave + 1
+)
++ 1
+) / 2;
+
+const red =
+Math.floor(
+255 * fade
+);
+
+ctx.shadowBlur = 40;
+ctx.shadowColor = "#ff0000";
+
+ctx.fillStyle =
+`rgb(${red},0,0)`;
+
+ctx.font =
+"bold 13px Arial";
+
+ctx.textAlign =
+"center";
+
+ctx.fillText(
+"I LOVE YOU",
+px,
+py
+);
+
+}
+
 angle += 0.003;
 wave += 0.02;
 
@@ -170,5 +236,7 @@ draw
 
 draw();
 
-</script></body>
+</script>
+
+</body>
 </html>
