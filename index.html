@@ -1,12 +1,39 @@
-const music = document.getElementById("bgMusic");
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Double Heart</title><style>
+body{
+margin:0;
+overflow:hidden;
+background:#000;
+}
 
-document.addEventListener(
-"click",
-()=>{
-music.play().catch(()=>{});
-},
-{once:true}
-);
+canvas{
+display:block;
+}
+
+#start{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+color:#fff;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:24px;
+cursor:pointer;
+z-index:10;
+}
+</style></head>
+<body><div id="start">Touch Screen ❤️</div><audio id="bgMusic" loop>
+<source src="song.mp3" type="audio/mpeg">
+</audio><canvas id="heartCanvas"></canvas>
+
+<script>
 
 const canvas =
 document.getElementById("heartCanvas");
@@ -14,9 +41,28 @@ document.getElementById("heartCanvas");
 const ctx =
 canvas.getContext("2d");
 
+const music =
+document.getElementById("bgMusic");
+
+const start =
+document.getElementById("start");
+
+start.addEventListener("click",()=>{
+
+music.play().catch(()=>{});
+
+start.style.display="none";
+
+});
+
 function resize(){
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
+
 }
 
 resize();
@@ -27,23 +73,54 @@ resize
 );
 
 let angle = 0;
-let wave = 0;
+let pulseTime = 0;
 
 const stars = [];
 
-for(let i=0;i<80;i++){
+for(let i=0;i<120;i++){
 
 stars.push({
 
 x:Math.random()*window.innerWidth,
-
 y:Math.random()*window.innerHeight,
-
-size:Math.random()*3+1,
-
-speed:Math.random()*0.8+0.2,
-
+size:Math.random()*2+1,
+speed:Math.random()*1.5+0.5,
 alpha:Math.random()
+
+});
+
+}
+
+function drawStars(){
+
+stars.forEach(star=>{
+
+star.y += star.speed;
+
+if(star.y > canvas.height){
+
+star.y = -10;
+star.x = Math.random()*canvas.width;
+
+}
+
+ctx.beginPath();
+
+ctx.fillStyle =
+`rgba(255,0,0,${star.alpha})`;
+
+ctx.shadowBlur = 10;
+ctx.shadowColor = "#ff0000";
+
+ctx.arc(
+star.x,
+star.y,
+star.size,
+0,
+Math.PI*2
+);
+
+ctx.fill();
 
 });
 
@@ -55,7 +132,8 @@ for(let i=0;i<120;i++){
 
 const t =
 i*(Math.PI*2/120)
-+ angle;
++ angle
++ offset;
 
 const x =
 16*Math.pow(
@@ -77,24 +155,17 @@ const py =
 canvas.height/2
 - y*scale;
 
-const fade =
+const glow =
 (
-Math.sin(
-i*0.15
-+ wave
-+ offset
-)+1
+Math.sin(i*0.2+offset)
++1
 )/2;
 
 const red =
-Math.floor(
-255*fade
-);
+180 + glow*75;
 
-ctx.shadowBlur = 40;
-
-ctx.shadowColor =
-"#ff0000";
+ctx.shadowBlur = 30;
+ctx.shadowColor = "#ff0000";
 
 ctx.fillStyle =
 `rgb(${red},0,0)`;
@@ -128,75 +199,32 @@ canvas.width,
 canvas.height
 );
 
-/* النجوم */
-
-stars.forEach(star=>{
-
-star.y += star.speed;
-
-if(
-star.y >
-canvas.height
-){
-
-star.y = -10;
-
-star.x =
-Math.random()*
-canvas.width;
-
-}
-
-ctx.beginPath();
-
-ctx.fillStyle =
-`rgba(255,0,0,${star.alpha})`;
-
-ctx.shadowBlur = 10;
-
-ctx.shadowColor =
-"#ff0000";
-
-ctx.arc(
-star.x,
-star.y,
-star.size,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-});
-
-/* نبض */
+drawStars();
 
 const pulse =
 1 +
 Math.sin(
-Date.now()*0.003
+pulseTime
 )*0.08;
 
-/* القلب الخارجي */
-
 drawHeart(
-20*pulse,
-14,
+22*pulse,
+15,
 0
 );
 
-/* القلب الداخلي */
-
 drawHeart(
-17*pulse,
-13,
-1
+18*pulse,
+14,
+1.5
 );
 
-angle += 0.004;
-
-wave += 0.03;
+pulseTime += 0.03;
+angle += 0.003;
 
 }
 
 animate();
+
+</script></body>
+</html>
