@@ -21,7 +21,7 @@ display:block;
 </head>
 <body>
 
-<audio id="bgMusic" loop>
+<audio id="bgMusic" loop preload="auto">
 <source src="song.mp3" type="audio/mpeg">
 </audio>
 
@@ -42,30 +42,24 @@ musicStarted = true;
 
 music.volume = 1;
 
-music.play().catch(()=>{});
+music.play().catch(err=>{
+console.log(err);
+});
 
 }
 
-/* تشغيل الصوت عند أول لمس أو حركة أو ضغطة */
+/* أول لمسة للشاشة */
 
 document.addEventListener(
 "touchstart",
-startMusic
-);
-
-document.addEventListener(
-"touchmove",
-startMusic
+startMusic,
+{once:true}
 );
 
 document.addEventListener(
 "click",
-startMusic
-);
-
-document.addEventListener(
-"mousemove",
-startMusic
+startMusic,
+{once:true}
 );
 
 const canvas =
@@ -212,7 +206,7 @@ Math.floor(
 );
 
 ctx.shadowBlur = 40;
-ctx.shadowColor = "#ff2222";
+ctx.shadowColor = "#ff0000";
 
 ctx.fillStyle =
 `rgb(${red},0,0)`;
