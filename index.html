@@ -1,53 +1,11 @@
-<!DOCTYPE html><html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neon Double Heart</title><style>
-body{
-margin:0;
-overflow:hidden;
-background:#000;
-touch-action:manipulation;
-}
-
-canvas{
-display:block;
-width:100vw;
-height:100vh;
-}
-</style></head>
-<body><audio id="bgMusic" loop preload="auto">
-<source src="song.mp3" type="audio/mpeg">
-</audio><canvas id="heartCanvas"></canvas>
-
-<script>
-
 const music = document.getElementById("bgMusic");
 
-function startMusic(){
-
+document.addEventListener(
+"click",
+()=>{
 music.play().catch(()=>{});
-
-document.removeEventListener(
-"touchstart",
-startMusic
-);
-
-document.removeEventListener(
-"click",
-startMusic
-);
-
-}
-
-document.addEventListener(
-"touchstart",
-startMusic
-);
-
-document.addEventListener(
-"click",
-startMusic
+},
+{once:true}
 );
 
 const canvas =
@@ -57,13 +15,8 @@ const ctx =
 canvas.getContext("2d");
 
 function resize(){
-
-canvas.width =
-window.innerWidth;
-
-canvas.height =
-window.innerHeight;
-
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 }
 
 resize();
@@ -73,20 +26,36 @@ window.addEventListener(
 resize
 );
 
+let angle = 0;
 let wave = 0;
 
+const stars = [];
+
+for(let i=0;i<80;i++){
+
+stars.push({
+
+x:Math.random()*window.innerWidth,
+
+y:Math.random()*window.innerHeight,
+
+size:Math.random()*3+1,
+
+speed:Math.random()*0.8+0.2,
+
+alpha:Math.random()
+
+});
+
+}
+
 function drawHeart(scale,textSize,offset){
-
-const centerX =
-canvas.width/2;
-
-const centerY =
-canvas.height/2;
 
 for(let i=0;i<120;i++){
 
 const t =
-i*(Math.PI*2/120);
+i*(Math.PI*2/120)
++ angle;
 
 const x =
 16*Math.pow(
@@ -101,32 +70,37 @@ const y =
 -Math.cos(4*t);
 
 const px =
-centerX + x*scale;
+canvas.width/2
++ x*scale;
 
 const py =
-centerY - y*scale;
+canvas.height/2
+- y*scale;
 
-const glow =
+const fade =
 (
 Math.sin(
-i*0.12+wave+offset
+i*0.15
++ wave
++ offset
 )+1
 )/2;
 
 const red =
-180 +
 Math.floor(
-75*glow
+255*fade
 );
 
-ctx.shadowBlur = 35;
-ctx.shadowColor = "#ff0000";
+ctx.shadowBlur = 40;
+
+ctx.shadowColor =
+"#ff0000";
 
 ctx.fillStyle =
 `rgb(${red},0,0)`;
 
 ctx.font =
-"bold "+textSize+"px Arial";
+`bold ${textSize}px Arial`;
 
 ctx.textAlign =
 "center";
@@ -143,6 +117,10 @@ py
 
 function animate(){
 
+requestAnimationFrame(
+animate
+);
+
 ctx.clearRect(
 0,
 0,
@@ -150,27 +128,75 @@ canvas.width,
 canvas.height
 );
 
+/* النجوم */
+
+stars.forEach(star=>{
+
+star.y += star.speed;
+
+if(
+star.y >
+canvas.height
+){
+
+star.y = -10;
+
+star.x =
+Math.random()*
+canvas.width;
+
+}
+
+ctx.beginPath();
+
+ctx.fillStyle =
+`rgba(255,0,0,${star.alpha})`;
+
+ctx.shadowBlur = 10;
+
+ctx.shadowColor =
+"#ff0000";
+
+ctx.arc(
+star.x,
+star.y,
+star.size,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+});
+
+/* نبض */
+
+const pulse =
+1 +
+Math.sin(
+Date.now()*0.003
+)*0.08;
+
+/* القلب الخارجي */
+
 drawHeart(
-22,
-15,
+20*pulse,
+14,
 0
 );
 
+/* القلب الداخلي */
+
 drawHeart(
-18,
-14,
-1.5
+17*pulse,
+13,
+1
 );
+
+angle += 0.004;
 
 wave += 0.03;
-
-requestAnimationFrame(
-animate
-);
 
 }
 
 animate();
-
-</script></body>
-</html>
