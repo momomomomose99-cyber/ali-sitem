@@ -40,26 +40,32 @@ if(musicStarted) return;
 
 musicStarted = true;
 
+music.volume = 1;
+
 music.play().catch(()=>{});
 
 }
 
+/* تشغيل الصوت عند أول لمس أو حركة أو ضغطة */
+
 document.addEventListener(
 "touchstart",
-startMusic,
-{once:true}
+startMusic
 );
 
 document.addEventListener(
 "touchmove",
-startMusic,
-{once:true}
+startMusic
+);
+
+document.addEventListener(
+"click",
+startMusic
 );
 
 document.addEventListener(
 "mousemove",
-startMusic,
-{once:true}
+startMusic
 );
 
 const canvas =
@@ -206,7 +212,7 @@ Math.floor(
 );
 
 ctx.shadowBlur = 40;
-ctx.shadowColor = "#ff0000";
+ctx.shadowColor = "#ff2222";
 
 ctx.fillStyle =
 `rgb(${red},0,0)`;
