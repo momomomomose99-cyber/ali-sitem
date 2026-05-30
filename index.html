@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARYAN ❤️</title>
+<title>Neon Heart</title><style>
 
-<style>
 body{
 margin:0;
 overflow:hidden;
@@ -16,35 +14,71 @@ font-family:Arial,sans-serif;
 canvas{
 display:block;
 }
-</style>
 
-</head>
-<body>
-
-<audio id="bgMusic" autoplay loop>
+</style></head>
+<body><audio id="bgMusic" loop>
 <source src="song.mp3" type="audio/mpeg">
-</audio>
-
-<canvas id="heartCanvas"></canvas>
+</audio><canvas id="heartCanvas"></canvas>
 
 <script>
 
-const music = document.getElementById("bgMusic");
+const music =
+document.getElementById("bgMusic");
 
-window.addEventListener("load",()=>{
+/* تشغيل الصوت عند أول لمس أو تحريك أو سحب */
+
+let musicStarted = false;
+
+function startMusic(){
+
+if(musicStarted) return;
+
+musicStarted = true;
+
 music.play().catch(()=>{});
-});
 
-const canvas = document.getElementById("heartCanvas");
-const ctx = canvas.getContext("2d");
+}
+
+document.addEventListener(
+"touchstart",
+startMusic,
+{once:true}
+);
+
+document.addEventListener(
+"touchmove",
+startMusic,
+{once:true}
+);
+
+document.addEventListener(
+"mousemove",
+startMusic,
+{once:true}
+);
+
+const canvas =
+document.getElementById("heartCanvas");
+
+const ctx =
+canvas.getContext("2d");
 
 function resize(){
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
+
 }
 
 resize();
-window.addEventListener("resize",resize);
+
+window.addEventListener(
+"resize",
+resize
+);
 
 let angle = 0;
 let wave = 0;
@@ -58,10 +92,15 @@ canvas.width,
 canvas.height
 );
 
-const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
+const centerX =
+canvas.width / 2;
+
+const centerY =
+canvas.height / 2;
 
 const scale = 20;
+
+/* القلب */
 
 for(let i=0;i<100;i++){
 
@@ -81,8 +120,11 @@ const y =
 - 2 * Math.cos(3*t)
 - Math.cos(4*t);
 
-const px = centerX + x * scale;
-const py = centerY - y * scale;
+const px =
+centerX + x * scale;
+
+const py =
+centerY - y * scale;
 
 const fade =
 (
@@ -117,33 +159,16 @@ py
 
 }
 
-ctx.shadowBlur = 70;
-ctx.shadowColor = "#ff0000";
-
-ctx.fillStyle = "#ff2222";
-
-ctx.font =
-"bold 70px Arial";
-
-ctx.textAlign =
-"center";
-
-ctx.fillText(
-"ARYAN",
-centerX,
-centerY
-);
-
 angle += 0.003;
 wave += 0.02;
 
-requestAnimationFrame(draw);
+requestAnimationFrame(
+draw
+);
 
 }
 
 draw();
 
-</script>
-
-</body>
+</script></body>
 </html>
